@@ -9,10 +9,23 @@ import "testing"
 */
 
 func TestHello(t *testing.T) {
-	got := Hello("Chris")
-	want := "Hello, Chris"
-
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
+	// testing.TB - interface that *testing.T and *testing.B both satisfy
+	assertCorrectMessage := func(t testing.TB, got, want string) {
+		// Для корректной нумерации строк
+		t.Helper()
+		if got != want {
+			t.Errorf("got %q want %q", got, want)
+		}
 	}
+
+	t.Run("saying hello to people", func(t *testing.T) {
+		got := Hello("Chris")
+		want := "Hello, Chris"
+		assertCorrectMessage(t, got, want)
+	})
+	t.Run("empty string defaults to 'World'", func(t *testing.T) {
+		got := Hello("")
+		want := "Hello, World"
+		assertCorrectMessage(t, got, want)
+	})
 }
